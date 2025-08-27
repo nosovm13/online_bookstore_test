@@ -8,28 +8,30 @@ from selenium.common.exceptions import NoAlertPresentException
 import math
 import time
 
-def solve_quiz_and_get_code(self):
-    alert = self.browser.switch_to.alert
-    x = alert.text.split(" ")[2]
-    answer = str(math.log(abs((12 * math.sin(float(x))))))
-    alert.send_keys(answer)
-    alert.accept()
-    try:
-        alert = self.browser.switch_to.alert
-        alert_text = alert.text
-        print(f"Your code: {alert_text}")
-        alert.accept()
-    except NoAlertPresentException:
-        print("No second alert presented")
+
 
 class ProductPage(BasePage): 
     def add_product_to_cart(self):
         btn  = self.browser.find_element(*ProductPageLocators.ADD_TO_BASCET_BUTTON)
         btn.click()
+        
+    def solve_quiz_and_get_code(self):
+        alert = self.browser.switch_to.alert
+        x = alert.text.split(" ")[2]
+        answer = str(math.log(abs((12 * math.sin(float(x))))))
+        alert.send_keys(answer)
+        alert.accept()
+        try:
+            alert = self.browser.switch_to.alert
+            alert_text = alert.text
+            print(f"Your code: {alert_text}")
+            time.sleep(4)
+            alert.accept()
+        except NoAlertPresentException:
+            print("No second alert presented")
 
-        solve_quiz_and_get_code(self)
+    def check_product_in_cart(self):
         print(f"Цена '{self.return_product_name()}' = {self.return_product_price()}")
-
         assert self.return_product_name() in self.browser.find_element(*ProductPageLocators.ALTER_PRDUCT_CONFIRM).text, f"Имя проукта не совпадает с добавленным"
 
     def return_product_name(self):
