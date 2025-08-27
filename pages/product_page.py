@@ -28,5 +28,12 @@ class ProductPage(BasePage):
         btn.click()
 
         solve_quiz_and_get_code(self)
+        print(f"Цена '{self.return_product_name()}' = {self.return_product_price()}")
 
-        assert self.browser.find_element(*ProductPageLocators.PRODUCT_NAME).text in self.browser.find_element(*ProductPageLocators.ALTER_PRDUCT_CONFIRM).text, f"Имя проукта не совпадает с добавленным"
+        assert self.return_product_name() in self.browser.find_element(*ProductPageLocators.ALTER_PRDUCT_CONFIRM).text, f"Имя проукта не совпадает с добавленным"
+
+    def return_product_name(self):
+        return self.browser.find_element(*ProductPageLocators.PRODUCT_NAME).text
+    
+    def return_product_price(self):
+        return self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE).text
